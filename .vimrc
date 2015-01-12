@@ -8,7 +8,7 @@ filetype off
 
 if has('vim_starting')
 	set runtimepath+=~/.vim/bundle/neobundle.vim
-	call neobundle#rc(expand('~/.vim/bundle/'))
+	call neobundle#begin(expand('~/.vim/bundle/'))
 endif
 
 " originalrepos on github
@@ -22,19 +22,21 @@ NeoBundle "Shougo/vimproc", {
         \ }}
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/unite-outline'
+NeoBundle 'Shougo/neocomplete.vim'
 NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'scrooloose/syntastic'
 NeoBundle 'aperezdc/vim-template'
 
+" Coloer Scheme
 NeoBundle 'jpo/vim-railscasts-theme'
 NeoBundle 'nanotech/jellybeans.vim'
 NeoBundle 'w0ng/vim-hybrid'
-"NeoBundle 'vim-scripts/twilight'
-"NeoBundle 'jonathanfilip/vim-lucius'
-"NeoBundle 'altercation/vim-colors-solarized'
-"NeoBundle 'vim-scripts/Wombat'
-"NeoBundle 'tomasr/molokai'
-"NeoBundle 'vim-scripts/rdark'
+
+" Node.js
+NeoBundle 'jelera/vim-javascript-syntax'
+NeoBundle 'pangloss/vim-javascript'
+NeoBundle 'myhere/vim-nodejs-complete'
+call neobundle#end()
 
 filetype plugin indent on	" required!
 filetype indent on
@@ -46,7 +48,6 @@ syntax on
 "
 "-------------------------------------------------- 
 set t_Co=256
-"colorscheme railscasts
 colorscheme hybrid
 
 "vim と Mac のクリップボードを共有
@@ -76,6 +77,9 @@ cmap w!! w !sudo tee > /dev/null %
 highlight ZenkakuSpace cterm=underline ctermfg=lightblue guibg=white
 au BufNewFile,BufRead * match ZenkakuSpace /　/
 
+set list
+set listchars=eol:$,tab:>-,trail:-,extends:>,precedes:<
+
 "-------------------------------------------------- 
 "
 " NERDTree
@@ -85,20 +89,75 @@ nmap <silent> <C-e>	:NERDTreeToggle<CR>
 
 "-------------------------------------------------- 
 "
-" Binary
+" Neocomplete
 "
 "-------------------------------------------------- 
-" vim -b : edit binary using xxd-format!
-augroup Binary
-	au!
-	au BufReadPre  *.bin let &binary=1
-	au BufReadPost * if &binary | %!xxd
-	au BufReadPost * set ft=xxd | endif
-	au BufWritePre * if &binary | %!xxd -r
-	au BufWritePre * endif
-	au BufWritePost * if &binary | %!xxd
-	au BufWritePost * set nomod | endif
-augroup END
+" Note: This option must set it in .vimrc(_vimrc).  NOT IN .gvimrc(_gvimrc)!
+" Disable AutoComplPop.
+let g:acp_enableAtStartup = 0
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+" Set minimum syntax keyword length.
+let g:neocomplete#sources#syntax#min_keyword_length = 3
+let g:neocomplete#lock_buffer_name_pattern = '\*ku\*'
+
+" Define dictionary.
+let g:neocomplete#sources#dictionary#dictionaries = {
+            \ 'default' : '',
+            \ 'vimshell' : $HOME.'/.vimshell_hist',
+            \ 'scheme' : $HOME.'/.gosh_completions'
+            \ }
+
+" Define keyword.
+if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+endif
+let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+    return neocomplete#close_popup() . "\<CR>"
+    " For no inserting <CR> key.
+    "return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplete#close_popup()
+inoremap <expr><C-e>  neocomplete#cancel_popup()
+
+" Enable omni completion.
+autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+" Enable heavy omni completion
+if !exists('g:neocomplete#sources#omni#input_patterns')
+    let g:neocomplete#sources#omni#input_patterns = {}
+endif
+
+" For perlomni
+let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'
+
+" For Node.js
+autocmd FileType javascript setlocal omnifunc=nodejscomplete#CompleteJS
+if !exists('g:neocomplchache_omni_functions')
+    let g:neocomplcache_omni_functions = {}
+endif
+let g:neocomplcache_omni_functions.javascript = 'nodejscomplete#CompleteJS'
+let g:node_usejscomplete = 1
 
 "-------------------------------------------------- 
 "
@@ -117,3 +176,19 @@ let g:license = "MIT"
 let g:email = "kento.m0505@gmail.com"
 let g:username = "Kento Matsui"
 
+"-------------------------------------------------- 
+"
+" Binary
+"
+"-------------------------------------------------- 
+" vim -b : edit binary using xxd-format!
+augroup Binary
+	au!
+	au BufReadPre  *.bin let &binary=1
+	au BufReadPost * if &binary | %!xxd
+	au BufReadPost * set ft=xxd | endif
+	au BufWritePre * if &binary | %!xxd -r
+	au BufWritePre * endif
+	au BufWritePost * if &binary | %!xxd
+	au BufWritePost * set nomod | endif
+augroup END
