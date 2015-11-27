@@ -32,6 +32,15 @@ NeoBundle 'jpo/vim-railscasts-theme'
 NeoBundle 'nanotech/jellybeans.vim'
 NeoBundle 'w0ng/vim-hybrid'
 
+" C lang
+NeoBundle 'Rip-Rip/clang_complete', {
+    \ 'autoload' : {'filetypes' : ['c', 'cpp']}
+    \ }
+NeoBundle 'osyo-manga/vim-marching', {
+    \ 'depends' : ['Shougo/vimproc.vim', 'osyo-manga/vim-reunions'],
+    \ 'autoload' : {'filetypes' : ['c', 'cpp']}
+    \ }
+
 " Node.js
 NeoBundle 'jelera/vim-javascript-syntax'
 NeoBundle 'pangloss/vim-javascript'
@@ -147,6 +156,12 @@ autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 if !exists('g:neocomplete#sources#omni#input_patterns')
     let g:neocomplete#sources#omni#input_patterns = {}
 endif
+
+" For C lang
+if !exists('g:neocomplete#force_omni_input_patterns')
+    let g:neocomplete#force_omni_input_patterns = {}
+endif
+let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 
 " For perlomni
 let g:neocomplete#sources#omni#input_patterns.perl = '\h\w*->\h\w*\|\h\w*::'

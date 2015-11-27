@@ -7,6 +7,7 @@ export KCODE=u           # KCODEにUTF-8を設定
 setopt correct           # コマンドのスペルを訂正する
 setopt magic_equal_subst # =以降も補完する(--prefix=/usrなど)
 bindkey -e
+bindkey '^U' backward-kill-line
 
 setopt no_beep           # ビープ音を鳴らさないようにする
 setopt auto_cd           # ディレクトリ名の入力のみで移動する 
@@ -88,7 +89,7 @@ SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
 
 ### Title (user@hostname) ###
 case "${TERM}" in
-	kterm*|xterm*|)
+	kterm*|xterm*)
 		precmd() {
 		echo -ne "\033]0;${USER}@${HOST%%.*}\007"
 		}
@@ -143,3 +144,13 @@ if [ -z "$TMUX" ]; then
         fi
     fi
 fi
+
+# ------------------------------
+# For golang
+# ------------------------------
+if [ -x "`which go`" ]; then
+      export GOROOT=`go env GOROOT`
+      export GOPATH=$HOME/code/go-local
+      export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
+fi
+
