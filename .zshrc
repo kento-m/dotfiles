@@ -148,9 +148,23 @@ fi
 # ------------------------------
 # For golang
 # ------------------------------
-if [ -x "`which go`" ]; then
-      export GOROOT=`go env GOROOT`
-      export GOPATH=$HOME/code/go-local
-      export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-fi
+export GOPATH=$HOME/Workspace/go/third-party:$HOME/Workspace/go/my-project
+export PATH=$PATH:$GOROOT/bin:$HOME/Workspace/go/third-party/bin:$HOME/Workspace/go/my-project/bin
+export GO15VENDOREXPERIMENT=1
 
+# ------------------------------
+# For java
+# ------------------------------
+export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+
+# ------------------------------
+# For python
+# ------------------------------
+export PYENV_ROOT=/usr/local/var/pyenv
+if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+
+# ------------------------------
+# For Ruby
+# ------------------------------
+export PATH="$HOME/.rbenv/bin:$PATH"
+eval "$(rbenv init -)"
