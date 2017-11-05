@@ -26,6 +26,35 @@ setopt list_packed             # 補完候補をできるだけ詰めて表示�
 setopt list_types              # 補完候補にファイルの種類も表示する
 bindkey "^[[Z" reverse-menu-complete  # Shift-Tabで補完候補を逆順する("\e[Z"でも動作する)
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # 補完時に大文字小文字を区別しない
+setopt auto_param_slash      # ディレクトリ名の補完で末尾の / を自動的に付加し、次の補完に備える
+setopt mark_dirs             # ファイル名の展開でディレクトリにマッチした場合 末尾に / を付加
+setopt auto_param_keys       # カッコの対応などを自動的に補完
+setopt complete_in_word      # 語の途中でもカーソル位置で補完
+setopt always_last_prompt    # カーソル位置は保持したままファイル名一覧を順次その場で表示
+setopt brace_ccl # 範囲指定できるようにする (例 : mkdir {1-3} で フォルダ1, 2, 3を作れる)
+zstyle ':completion:*:default' menu select=2
+# 補完関数の表示を強化する
+zstyle ':completion:*' verbose yes
+zstyle ':completion:*' completer _expand _complete _match _prefix _approximate _list _history
+zstyle ':completion:*:messages' format '%F{YELLOW}%d'$DEFAULT
+zstyle ':completion:*:warnings' format '%F{RED}No matches for:''%F{YELLOW} %d'$DEFAULT
+zstyle ':completion:*:descriptions' format '%F{YELLOW}completing %B%d%b'$DEFAULT
+zstyle ':completion:*:options' description 'yes'
+zstyle ':completion:*:descriptions' format '%F{yellow}Completing %B%d%b%f'$DEFAULT
+# マッチ種別を別々に表示
+zstyle ':completion:*' group-name ''
+# セパレータを設定する
+zstyle ':completion:*' list-separator '-->'
+zstyle ':completion:*:manuals' separate-sections true
+# 名前で色を付けるようにする
+autoload colors
+colors
+# LS_COLORSを設定しておく
+export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+# ファイル補完候補に色を付ける
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# オブジェクトファイルとか中間ファイルとかはfileとして補完させない
+zstyle ':completion:*:*files' ignored-patterns '*?.o' '*?~' '*\#'
 
 ### Glob ###
 setopt extended_glob # グロブ機能を拡張する
@@ -109,48 +138,49 @@ alias ll='ls -l'
 # For Mac
 # ------------------------------
 # MacPortsとHomebrew用の環境変数
-case ${OSTYPE} in
-    darwin*)
-        export PATH=/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/sbin:$PATH
-        export MANPATH=/opt/local/man:$MANPATH
-        ;;
-esac
+#case ${OSTYPE} in
+#    darwin*)
+#        export PATH=/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/sbin:$PATH
+#        export MANPATH=/opt/local/man:$MANPATH
+#        ;;
+#esac
 
 # ------------------------------
 # For World
 # ------------------------------
 # set SSH_AUTH_SOCK
-if [ -n "${TMUX}" ]; then
-    NEWVAL=`tmux show-environment | grep "^SSH_AUTH_SOCK" | cut -d"=" -f2`
-    if [ -n "${NEWVAL}" ]; then
-        export SSH_AUTH_SOCK=${NEWVAL}
-    fi
-fi
-
-AGENT="$HOME/.ssh/auth_sock_$YROOT_NAME"
-if [ -z "$TMUX" ]; then
-    if [ ! -z "$SSH_TTY" ]; then
-        if [ "$SSH_AUTH_SOCK" -a "$SSH_AUTH_SOCK" != "$AGENT" ]; then
-            if [ ! -S $AGENT ]; then
-                rm -f $AGENT
-                ln -fs $SSH_AUTH_SOCK $AGENT
-                export SSH_AUTH_SOCK=$AGENT
-            fi
-            if [ "$SSH_AUTH_SOCK" != "$AGENT" ]; then
-                if [ -S $AGENT ]; then
-                    export SSH_AUTH_SOCK=$AGENT
-                fi
-            fi
-        fi
-    fi
-fi
+#if [ -n "${TMUX}" ]; then
+#    NEWVAL=`tmux show-environment | grep "^SSH_AUTH_SOCK" | cut -d"=" -f2`
+#    if [ -n "${NEWVAL}" ]; then
+#        export SSH_AUTH_SOCK=${NEWVAL}
+#    fi
+#fi
+#
+#AGENT="$HOME/.ssh/auth_sock_$YROOT_NAME"
+#if [ -z "$TMUX" ]; then
+#    if [ ! -z "$SSH_TTY" ]; then
+#        if [ "$SSH_AUTH_SOCK" -a "$SSH_AUTH_SOCK" != "$AGENT" ]; then
+#            if [ ! -S $AGENT ]; then
+#                rm -f $AGENT
+#                ln -fs $SSH_AUTH_SOCK $AGENT
+#                export SSH_AUTH_SOCK=$AGENT
+#            fi
+#            if [ "$SSH_AUTH_SOCK" != "$AGENT" ]; then
+#                if [ -S $AGENT ]; then
+#                    export SSH_AUTH_SOCK=$AGENT
+#                fi
+#            fi
+#        fi
+#    fi
+#fi
 
 # ------------------------------
 # For golang
 # ------------------------------
-export GOPATH=$HOME/Workspace/go/third-party:$HOME/Workspace/go/my-project
-export PATH=$PATH:$GOROOT/bin:$HOME/Workspace/go/third-party/bin:$HOME/Workspace/go/my-project/bin
+export GOPATH=$HOME/go
+export PATH=$PATH:$HOME/.goenv/bin:$GOPATH/bin
 export GO15VENDOREXPERIMENT=1
+eval "$(goenv init -)"
 
 # ------------------------------
 # For java
@@ -168,3 +198,16 @@ if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 # ------------------------------
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
+
+# ------------------------------
+# For Node.js
+# ------------------------------
+export PATH=$HOME/.nodebrew/current/bin:$PATH
+
+# ------------------------------
+# For docker
+# ------------------------------
+fpath=(/usr/local/share/zsh-completions $fpath)
+
+autoload -U compinit
+compinit
