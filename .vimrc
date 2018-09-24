@@ -45,6 +45,11 @@ NeoBundle 'osyo-manga/vim-marching', {
 NeoBundle 'jelera/vim-javascript-syntax'
 NeoBundle 'pangloss/vim-javascript'
 NeoBundle 'myhere/vim-nodejs-complete'
+
+" Org-mode
+NeoBundle 'jceb/vim-orgmode'
+NeoBundle 'tpope/vim-speeddating'
+
 call neobundle#end()
 
 filetype plugin indent on	" required!
