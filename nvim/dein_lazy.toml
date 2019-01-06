@@ -1,0 +1,68 @@
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+on_event = 'InsertEnter'
+hook_add = '''
+  let g:deoplete#enable_at_startup = 1
+  inoremap <expr><Tab> pumvisible() ? "\<DOWN>" : "\<Tab>"
+  inoremap <expr><S-Tab> pumvisible() ? "\<UP>" : "\<S-Tab>"
+'''
+
+[[plugins]]
+repo = 'Shougo/denite.nvim'
+
+[[plugins]]
+repo = 'plasticboy/vim-markdown'
+on_ft = ['md']
+hook_add = '''
+  autocmd BufRead,BufNewFile *.mkd  set filetype=markdown
+  autocmd BufRead,BufNewFile *.md  set filetype=markdown
+  nnoremap <silent> <C-p> :PrevimOpen<CR>
+  let g:vim_markdown_folding_disabled=1
+  let g:previm_disable_default_css = 1
+  let g:previm_custom_css_path = '~/.vim/templates/previm/markdown.css'
+'''
+
+[[plugins]]
+repo = 'kannokanno/previm'
+on_ft = ['md']
+
+[[plugins]]
+repo = 'tyru/open-browser.vim'
+on_ft = ['md']
+
+[[plugins]]
+repo = 'jceb/vim-orgmode'
+on_ft = ['org']
+
+[[plugins]]
+repo = 'tpope/vim-speeddating'
+on_ft = ['org']
+
+[[plugins]] 
+repo = 'fatih/vim-go'
+on_ft = 'go'
+
+[[plugins]]
+repo = 'zchee/deoplete-go'
+build = 'make'
+on_ft = ['go']
+depends = ['deoplete.nvim']
+hook_add = '''
+   let g:deoplete#sources#go#gocode_binary = $GOPATH . '/bin/gocode'
+'''
+
+[[plugins]]
+repo = 'jelera/vim-javascript-syntax'
+on_ft = ['javascript', 'js']
+depends = ['/deoplete']
+
+[[plugins]]
+repo = 'pangloss/vim-javascript'
+on_ft = ['javascript', 'js']
+depends = ['/deoplete']
+
+[[plugins]]
+repo = 'myhere/vim-nodejs-complete'
+on_ft = ['javascript', 'js']
+depends = ['/deoplete']
+
