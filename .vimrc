@@ -19,7 +19,12 @@ if dein#load_state('~/.cache/dein')
     call dein#add('roxma/vim-hug-neovim-rpc')
   endif
 
+  " NerdTree
   call dein#add('scrooloose/nerdtree')
+
+  " airline
+  call dein#add('vim-airline/vim-airline')
+  call dein#add('vim-airline/vim-airline-themes')
 
   " Coloer Scheme
   call dein#add('nanotech/jellybeans.vim')
@@ -85,6 +90,35 @@ au BufNewFile,BufRead * match ZenkakuSpace /　/
 nmap <silent> <C-e>	:NERDTreeToggle<CR>
 " work around of https://github.com/scrooloose/nerdtree/issues/928
 let g:NERDTreeNodeDelimiter = "\u00a0"
+
+"-------------------------------------------------- 
+"
+" vim-airline
+"
+"-------------------------------------------------- 
+set laststatus=2
+let g:airline_powerline_fonts = 1
+let g:airline#extensions#tabline#enabled = 1
+let g:airline#extensions#tabline#buffer_idx_mode = 1
+let g:airline#extensions#whitespace#mixed_indent_algo = 1
+"let g:airline_theme = 'tomorrow'
+let g:airline_theme = 'deus'
+if !exists('g:airline_symbols')
+  let g:airline_symbols = {}
+endif
+
+let g:airline_left_sep = '⮀'            "左側に使用されるセパレータ
+let g:airline_left_alt_sep = '⮁'
+let g:airline_right_sep = '⮂'           "右側に使用されるセパレータ
+let g:airline_right_alt_sep = '⮃'
+let g:airline_symbols.crypt = '🔒'      "暗号化されたファイル
+let g:airline_symbols.linenr = '¶'      "行
+let g:airline_symbols.maxlinenr = '㏑'  "最大行
+let g:airline_symbols.branch = '⭠'      "gitブランチ
+let g:airline_symbols.paste = 'ρ'       "ペーストモード
+let g:airline_symbols.spell = 'Ꞩ'       "スペルチェック
+let g:airline_symbols.notexists = '∄'   "gitで管理されていない場合
+let g:airline_symbols.whitespace = 'Ξ'  "空白の警告(余分な空白など)
 
 "-------------------------------------------------- 
 "

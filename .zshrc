@@ -98,32 +98,51 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 ### Prompt ###
 # プロンプトに色を付ける
 autoload -U colors; colors
+#
+## 一般ユーザ時
+#tmp_prompt2="%{${fg[cyan]}%}%_> %{${reset_color}%}"
+#tmp_rprompt="%{${fg[green]}%}[%~]%{${reset_color}%}"
+#tmp_sprompt="%{${fg[yellow]}%}%r is correct? [Yes, No, Abort, Edit]:%{${reset_color}%}"
+#
+## rootユーザ時(太字にし、アンダーバーをつける)
+#if [ ${UID} -eq 0 ]; then
+#	tmp_prompt2="%B%U${tmp_prompt2}%u%b"
+#	tmp_rprompt="%B%U${tmp_rprompt}%u%b"
+#	tmp_sprompt="%B%U${tmp_sprompt}%u%b"
+#fi
+#
+#PROMPT="%{${fg[cyan]}%}[%n@${HOST%%.*}]%# %{${reset_color}%}" # 通常のプロンプト
+#PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以上の時に表示される)
+#RPROMPT=$tmp_rprompt  # 右側のプロンプト
+#SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
+#
+#### Title (user@hostname) ###
+#case "${TERM}" in
+#	kterm*|xterm*)
+#		precmd() {
+#		echo -ne "\033]0;${USER}@${HOST%%.*}\007"
+#		}
+#	;;
+#esac
+# ------------------------------
+# Powerline
+# ------------------------------
+function powerline_precmd() {
+  PS1="$(~/.local/bin/powerline-shell --shell zsh $?)"
+}
 
-# 一般ユーザ時
-tmp_prompt2="%{${fg[cyan]}%}%_> %{${reset_color}%}"
-tmp_rprompt="%{${fg[green]}%}[%~]%{${reset_color}%}"
-tmp_sprompt="%{${fg[yellow]}%}%r is correct? [Yes, No, Abort, Edit]:%{${reset_color}%}"
+function install_powerline_precmd() {
+  for s in "${precmd_functions[@]}"; do
+    if [ "$s" = "powerline_precmd" ]; then
+      return
+    fi
+  done
+  precmd_functions+=(powerline_precmd)
+}
 
-# rootユーザ時(太字にし、アンダーバーをつける)
-if [ ${UID} -eq 0 ]; then
-	tmp_prompt2="%B%U${tmp_prompt2}%u%b"
-	tmp_rprompt="%B%U${tmp_rprompt}%u%b"
-	tmp_sprompt="%B%U${tmp_sprompt}%u%b"
+if [ "$TERM" != "linux" ]; then
+  install_powerline_precmd
 fi
-
-PROMPT="%{${fg[cyan]}%}[%n@${HOST%%.*}]%# %{${reset_color}%}" # 通常のプロンプト
-PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以上の時に表示される)
-RPROMPT=$tmp_rprompt  # 右側のプロンプト
-SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
-
-### Title (user@hostname) ###
-case "${TERM}" in
-	kterm*|xterm*)
-		precmd() {
-		echo -ne "\033]0;${USER}@${HOST%%.*}\007"
-		}
-	;;
-esac
 
 # ------------------------------
 # Other Settings
@@ -138,12 +157,12 @@ alias ll='ls -l'
 # For Mac
 # ------------------------------
 # MacPortsとHomebrew用の環境変数
-#case ${OSTYPE} in
-#    darwin*)
-#        export PATH=/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/sbin:$PATH
-#        export MANPATH=/opt/local/man:$MANPATH
-#        ;;
-#esac
+case ${OSTYPE} in
+    darwin*)
+        export PATH=/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/sbin:$PATH
+        export MANPATH=/opt/local/man:$MANPATH
+        ;;
+esac
 
 # ------------------------------
 # For World
@@ -200,6 +219,15 @@ export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 
 # ------------------------------
+# For GCP
+# ------------------------------
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/kentomatsui/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/kentomatsui/google-cloud-sdk/path.zsh.inc'; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f '/Users/kentomatsui/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/kentomatsui/google-cloud-sdk/completion.zsh.inc'; fi
+
+# ------------------------------
 # For Node.js
 # ------------------------------
 export PATH=$HOME/.nodebrew/current/bin:$PATH
@@ -207,7 +235,8 @@ export PATH=$HOME/.nodebrew/current/bin:$PATH
 # ------------------------------
 # For docker
 # ------------------------------
-fpath=(/usr/local/share/zsh-completions $fpath)
+fpath=(/usr/local/share/zsh-completions /usr/local/share/zsh/vendor-completions $fpath)
 
+#autoload -Uz compinit && compinit -i
 autoload -U compinit
 compinit
