@@ -29,14 +29,20 @@ if dein#load_state('~/.cache/dein')
   " Coloer Scheme
   call dein#add('nanotech/jellybeans.vim')
 
+  " git markdown
+  call dein#add('plasticboy/vim-markdown')
+  call dein#add('kannokanno/previm')
+  call dein#add('tyru/open-browser.vim')
+
+  " Org-mode
+  call dein#add('jceb/vim-orgmode')
+  call dein#add('tpope/vim-speeddating')
+
   " Node.js
   call dein#add('jelera/vim-javascript-syntax')
   call dein#add('pangloss/vim-javascript')
   call dein#add('myhere/vim-nodejs-complete')
 
-  " Org-mode
-  call dein#add('jceb/vim-orgmode')
-  call dein#add('tpope/vim-speeddating')
   call dein#end()
   call dein#save_state()
 endif
@@ -136,3 +142,15 @@ augroup Binary
     au BufWritePost * if &binary | %!xxd
     au BufWritePost * set nomod | endif
 augroup END
+
+"-------------------------------------------------- 
+"
+" Markdown
+"
+"-------------------------------------------------- 
+autocmd BufRead,BufNewFile *.mkd  set filetype=markdown
+autocmd BufRead,BufNewFile *.md  set filetype=markdown
+nnoremap <silent> <C-p> :PrevimOpen<CR>
+let g:vim_markdown_folding_disabled=1
+let g:previm_disable_default_css = 1
+let g:previm_custom_css_path = '~/.vim/templates/previm/markdown.css'
