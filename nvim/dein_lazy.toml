@@ -14,7 +14,7 @@ repo = 'Shougo/denite.nvim'
 [[plugins]]
 repo = 'plasticboy/vim-markdown'
 on_ft = ['markdown']
-depends = ['previm', 'vim-browser']
+depends = ['previm', 'open-browser.vim']
 hook_add = '''
   autocmd BufRead,BufNewFile *.mkd  set filetype=markdown
   autocmd BufRead,BufNewFile *.md  set filetype=markdown
