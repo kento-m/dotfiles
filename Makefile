@@ -55,8 +55,9 @@ vim:
 
 golang:
 	git clone https://github.com/dataich/goenv.git ~/.goenv
-	export PATH="$HOME/.goenv/bin:$PATH"
-	eval "$(goenv init -)"
+	export GOENV_ROOT="$$HOME/.goenv"
+	export PATH="$$GOENV_ROOT/bin:$$PATH"
+	eval "$$(goenv init -)"
 	goenv install 1.11.4
 	goenv global 1.11.4
 	$(BREW) install dep
