@@ -1,7 +1,7 @@
 BREW = /usr/local/bin/brew
 
-first: init ricty nord-tmux python powerline vim goenv java docker k8s rbenv node
-second: golang cfssl ruby
+first: init ricty nord-tmux python powerline vim goenv java docker minikube rbenv nodebrew
+second: golang cfssl ruby node k8s-completion
 
 init:
 	cp .zshrc ~/
@@ -67,16 +67,14 @@ docker:
 	$(BREW) install sysdig
 	curl -fLo /usr/local/share/zsh/vendor-completions/_docker https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker
 
-k8s:
+minikube:
 	$(BREW) cask install minikube # kubectl will be installed
-	source <(kubectl completion zsh)
 
 rbenv:
 	$(BREW) install rbenv ruby-build
 
-node:
+nodebrew:
 	curl -L git.io/nodebrew | perl - setup
-	nodebrew install-binary latest
 
 golang:
 	goenv install 1.11.4
@@ -95,3 +93,9 @@ ruby:
 	rbenv install 2.4.1
 	rbenv global 2.4.1
 	sudo gem install bundler
+
+node:
+	nodebrew install-binary latest
+
+k8s-completion:
+	source <(kubectl completion zsh)
