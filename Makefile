@@ -1,9 +1,11 @@
+# install Xcode
+
 BREW = /usr/local/bin/brew
 PIP = /usr/local/var/pyenv/shims/pip
 
 ALL: FIRST
 
-FIRST: casks
+FIRST: init ricty nord-tmux
 
 init:
 	cp .zshrc ~/
@@ -15,6 +17,7 @@ init:
 	$(BREW) install zsh-completions
 	$(BREW) tap caskroom/cask
 	$(BREW) cask install iterm2
+	$(BREW) cask install karabiner
 	$(BREW) cask install google-chrome
 	$(BREW) cask install firefox 
 	$(BREW) cask install intellij-idea
@@ -22,8 +25,19 @@ init:
 	$(BREW) cask install vagrant
 	$(BREW) cask install vagrant-manager
 
+ricty:
+	$(BREW) install ricty --vim-powerline --powerline
+	cp /usr/local/opt/ricty/share/fonts/Ricty*.ttf ~/Library/Fonts/
+	fc-cache -vf
+
+nord-tmux:
+	git clone https://github.com/arcticicestudio/nord-tmux ~/.tmux/themes/nord-tmux
+	curl -OL https://github.com/arcticicestudio/nord-iterm2/archive/v0.2.0.zip
+	unzip v0.2.0.zip
+	# https://github.com/arcticicestudio/nord-iterm2を参考にセットアップ
+
 python:
-	brew install pyenv
+	$(BREW) install pyenv
 	CFLAGS="-I$(xcrun --show-sdk-path)/usr/include" pyenv install 2.7.13
 	CFLAGS="-I$(xcrun --show-sdk-path)/usr/include" pyenv install 3.6.1
 	PYENV_ROOT=/usr/local/var/pyenv pyenv init
@@ -31,19 +45,10 @@ python:
 	curl -O https://bootstrap.pypa.io/get-pip.py
 	sudo python get-pip.py
 
-ricty:
-	$(BREW) install ricty --vim-powerline --powerline
-	cp /usr/local/opt/ricty/share/fonts/Ricty*.ttf ~/Library/Fonts/
-	fc-cache -vf
 
 powerline:
 	$(PIP) install --user powerline-shell
 
-nord-tmux:
-	git clone https://github.com/arcticicestudio/nord-tmux ~/.tmux/themes/nord-tmux
-	curl -OL https://github.com/arcticicestudio/nord-iterm2/archive/v0.2.0.zip
-	unzip v0.2.0.zip
-	# https://github.com/arcticicestudio/nord-iterm2を参考にセットアップ
 
 vim:
 	$(BREW) install neovim
