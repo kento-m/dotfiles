@@ -9,7 +9,7 @@ FIRST: init ricty nord-tmux
 
 init:
 	cp .zshrc ~/
-	cp .tmux.comf ~/
+	cp .tmux.conf ~/
 	cp -r nvim ~/.config/
 	chsh -s /bin/zsh
 	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/uninstall)"
