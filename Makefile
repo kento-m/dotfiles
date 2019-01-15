@@ -1,6 +1,7 @@
 BREW = /usr/local/bin/brew
 
-ALL: init ricty nord-tmux python powerline vim golang java docker k8s ruby node cfssl
+first: init ricty nord-tmux python powerline vim goenv java docker k8s rbenv node
+second: golang cfssl ruby
 
 init:
 	cp .zshrc ~/
@@ -53,18 +54,8 @@ vim:
 	mkdir -p ~/.vim/templates/previm/
 	curl -fLo ~/.vim/templates/previm/markdown.css https://raw.githubusercontent.com/tsuyoshiwada/dotfiles/9023005bb30d4d895f69233156dd6f488d29e841/templates/previm/markdown.css
 
-golang:
+goenv:
 	git clone https://github.com/dataich/goenv.git ~/.goenv
-	export GOENV_ROOT="$$HOME/.goenv"
-	export PATH="$$GOENV_ROOT/bin:$$PATH"
-	eval "$$(goenv init -)"
-	goenv install 1.11.4
-	goenv global 1.11.4
-	$(BREW) install dep
-	mkdir -p ~/go/bin
-	mkdir -p ~/go/pkg
-	mkdir -p ~/go/src
-	go get -u github.com/mdempsky/gocode
 
 java:
 	$(BREW) cask install java
@@ -80,16 +71,27 @@ k8s:
 	$(BREW) cask install minikube # kubectl will be installed
 	source <(kubectl completion zsh)
 
-ruby:
+rbenv:
 	$(BREW) install rbenv ruby-build
-	rbenv install 2.4.1
-	rbenv global 2.4.1
-	sudo gem install bundler
 
 node:
 	curl -L git.io/nodebrew | perl - setup
 	nodebrew install-binary latest
 
+golang:
+	goenv install 1.11.4
+	goenv global 1.11.4
+	$(BREW) install dep
+	mkdir -p ~/go/bin
+	mkdir -p ~/go/pkg
+	mkdir -p ~/go/src
+	go get -u github.com/mdempsky/gocode
+
 cfssl:
 	go get -u github.com/cloudflare/cfssl/cmd/cfssl
 	go get -u github.com/cloudflare/cfssl/cmd/cfssljson
+
+ruby:
+	rbenv install 2.4.1
+	rbenv global 2.4.1
+	sudo gem install bundler

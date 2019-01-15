@@ -9,9 +9,12 @@ $ cd dotfiles
 ```
 4. make
 ```
-$ make
+$ make first
 ```
 5. karabiner-elements設定
 6. iTerm2を開く
 7. nord-iterm2を[arcticicestudio/nord-iterm2](https://github.com/arcticicestudio/nord-iterm2) を参考にセットアップ
-
+8. make
+```
+$ make second
+```
