@@ -100,32 +100,7 @@ zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
 ### Prompt ###
 # プロンプトに色を付ける
 autoload -U colors; colors
-#
-## 一般ユーザ時
-#tmp_prompt2="%{${fg[cyan]}%}%_> %{${reset_color}%}"
-#tmp_rprompt="%{${fg[green]}%}[%~]%{${reset_color}%}"
-#tmp_sprompt="%{${fg[yellow]}%}%r is correct? [Yes, No, Abort, Edit]:%{${reset_color}%}"
-#
-## rootユーザ時(太字にし、アンダーバーをつける)
-#if [ ${UID} -eq 0 ]; then
-#	tmp_prompt2="%B%U${tmp_prompt2}%u%b"
-#	tmp_rprompt="%B%U${tmp_rprompt}%u%b"
-#	tmp_sprompt="%B%U${tmp_sprompt}%u%b"
-#fi
-#
-#PROMPT="%{${fg[cyan]}%}[%n@${HOST%%.*}]%# %{${reset_color}%}" # 通常のプロンプト
-#PROMPT2=$tmp_prompt2  # セカンダリのプロンプト(コマンドが2行以上の時に表示される)
-#RPROMPT=$tmp_rprompt  # 右側のプロンプト
-#SPROMPT=$tmp_sprompt  # スペル訂正用プロンプト
-#
-#### Title (user@hostname) ###
-#case "${TERM}" in
-#	kterm*|xterm*)
-#		precmd() {
-#		echo -ne "\033]0;${USER}@${HOST%%.*}\007"
-#		}
-#	;;
-#esac
+
 # ------------------------------
 # Powerline
 # ------------------------------
@@ -154,17 +129,6 @@ if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
 
 ### Aliases ###
 alias ll='ls -l'
-
-# ------------------------------
-# For Mac
-# ------------------------------
-# MacPortsとHomebrew用の環境変数
-case ${OSTYPE} in
-    darwin*)
-        export PATH=/opt/local/bin:/opt/local/sbin:/usr/local/bin:/usr/local/sbin:$PATH
-        export MANPATH=/opt/local/man:$MANPATH
-        ;;
-esac
 
 # ------------------------------
 # For World
@@ -199,14 +163,12 @@ esac
 # For golang
 # ------------------------------
 export GOPATH=$HOME/go
-export PATH=$PATH:$HOME/.goenv/bin:$GOPATH/bin
-export GO15VENDOREXPERIMENT=1
-eval "$(goenv init -)"
+if which goenv > /dev/null; then eval "$(goenv init -)"; fi
 
 # ------------------------------
 # For java
 # ------------------------------
-export JAVA_HOME=`/usr/libexec/java_home -v 11.0`
+export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 
 # ------------------------------
 # For python
@@ -217,28 +179,30 @@ if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
 # ------------------------------
 # For Ruby
 # ------------------------------
-export PATH="$HOME/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
-
-# ------------------------------
-# For GCP
-# ------------------------------
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/kentomatsui/google-cloud-sdk/path.zsh.inc' ]; then source '/Users/kentomatsui/google-cloud-sdk/path.zsh.inc'; fi
-
-# The next line enables shell command completion for gcloud.
-if [ -f '/Users/kentomatsui/google-cloud-sdk/completion.zsh.inc' ]; then source '/Users/kentomatsui/google-cloud-sdk/completion.zsh.inc'; fi
-
-# ------------------------------
-# For Node.js
-# ------------------------------
-export PATH=$HOME/.nodebrew/current/bin:$PATH
+if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 
 # ------------------------------
 # For docker
 # ------------------------------
 fpath=(/usr/local/share/zsh-completions /usr/local/share/zsh/vendor-completions $fpath)
 
-#autoload -Uz compinit && compinit -i
+# ------------------------------
+# For k8s
+# ------------------------------
+source <(kubectl completion zsh)
+
+# ------------------------------
+# For GCP
+# ------------------------------
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f ~/google-cloud-sdk/path.zsh.inc ]; then . ~/google-cloud-sdk/path.zsh.inc; fi
+
+# The next line enables shell command completion for gcloud.
+if [ -f ~/google-cloud-sdk/completion.zsh.inc ]; then . ~/google-cloud-sdk/completion.zsh.inc; fi
+
+# ------------------------------
+# For completion
+# ------------------------------
 autoload -U compinit
 compinit
+

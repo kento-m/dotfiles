@@ -1,7 +1,14 @@
 BREW = /usr/local/bin/brew
 
-first: init ricty nord-tmux python powerline vim goenv java docker minikube rbenv nodebrew
-second: golang cfssl ruby node k8s-completion
+first: init ricty nord-tmux pyenv
+second: python powerline vim goenv java docker minikube rbenv nodebrew
+third: golang cfssl ruby node k8s-completion
+
+###############
+#
+# first
+#
+###############
 
 init:
 	cp .zshrc ~/
@@ -33,26 +40,8 @@ nord-tmux:
 	curl -OL https://github.com/arcticicestudio/nord-iterm2/archive/v0.2.0.zip
 	unzip v0.2.0.zip
 
-python:
+pyenv:
 	$(BREW) install pyenv
-	CFLAGS="-I$$(xcrun --show-sdk-path)/usr/include" pyenv install 2.7.13
-	CFLAGS="-I$$(xcrun --show-sdk-path)/usr/include" pyenv install 3.7.2
-	export PYENV_ROOT=/usr/local/var/pyenv
-	eval "$$(pyenv init -)"
-	pyenv global 3.7.2
-	curl -O https://bootstrap.pypa.io/get-pip.py
-	sudo python get-pip.py
-
-powerline:
-	pip install --user powerline-shell
-
-vim:
-	$(BREW) install neovim
-	pip install neovim
-	curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
-	sh ./installer.sh ~/.cache/dein
-	mkdir -p ~/.vim/templates/previm/
-	curl -fLo ~/.vim/templates/previm/markdown.css https://raw.githubusercontent.com/tsuyoshiwada/dotfiles/9023005bb30d4d895f69233156dd6f488d29e841/templates/previm/markdown.css
 
 goenv:
 	git clone https://github.com/dataich/goenv.git ~/.goenv
@@ -75,6 +64,31 @@ rbenv:
 
 nodebrew:
 	curl -L git.io/nodebrew | perl - setup
+
+###############
+#
+# Second
+#
+###############
+
+python:
+	CFLAGS="-I$$(xcrun --show-sdk-path)/usr/include" pyenv install 2.7.13
+	CFLAGS="-I$$(xcrun --show-sdk-path)/usr/include" pyenv install 3.7.2
+	pyenv global 3.7.2
+	curl -O https://bootstrap.pypa.io/get-pip.py
+	sudo python get-pip.py
+
+powerline:
+	pip install --user powerline-shell
+
+vim:
+	$(BREW) install neovim
+	pip install neovim
+	curl https://raw.githubusercontent.com/Shougo/dein.vim/master/bin/installer.sh > installer.sh
+	sh ./installer.sh ~/.cache/dein
+	mkdir -p ~/.vim/templates/previm/
+	curl -fLo ~/.vim/templates/previm/markdown.css https://raw.githubusercontent.com/tsuyoshiwada/dotfiles/9023005bb30d4d895f69233156dd6f488d29e841/templates/previm/markdown.css
+
 
 golang:
 	goenv install 1.11.4
@@ -99,3 +113,4 @@ node:
 
 k8s-completion:
 	source <(kubectl completion zsh)
+update-dotfiles:
