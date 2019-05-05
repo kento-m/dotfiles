@@ -110,6 +110,7 @@ ruby:
 
 node:
 	nodebrew install-binary latest
+	#npm install -g vue-cli
 
 k8s-completion:
 	source <(kubectl completion zsh)
