@@ -115,3 +115,6 @@ node:
 k8s-completion:
 	source <(kubectl completion zsh)
 update-dotfiles:
+
+rust:
+	curl https://sh.rustup.rs -sSf | sh

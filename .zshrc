@@ -3,11 +3,11 @@ alias vim='nvim'
 # ------------------------------
 # General Settings
 # ------------------------------
-export EDITOR=vim        # エディタをvimに設定
-#export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
-export KCODE=u           # KCODEにUTF-8を設定
-setopt correct           # コマンドのスペルを訂正する
-setopt magic_equal_subst # =以降も補完する(--prefix=/usrなど)
+export EDITOR=vim         # エディタをvimに設定
+export LC_ALL=jp_JP.UTF-8 # 文字コードをUTF-8に設定
+export KCODE=u            # KCODEにUTF-8を設定
+setopt correct            # コマンドのスペルを訂正する
+setopt magic_equal_subst  # =以降も補完する(--prefix=/usrなど)
 bindkey -e
 bindkey '^U' backward-kill-line
 
@@ -164,6 +164,11 @@ alias ll='ls -l'
 # ------------------------------
 export GOPATH=$HOME/go
 if which goenv > /dev/null; then eval "$(goenv init -)"; fi
+
+# ------------------------------
+# For Rust
+# ------------------------------
+export PATH="$HOME/.cargo/bin:$PATH"
 
 # ------------------------------
 # For java
