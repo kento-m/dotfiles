@@ -1,13 +1,18 @@
+# zshの起動が遅くなったときにプロファイルを見る用
+#zmodload zsh/zprof && zprof
+
 alias vim='nvim'
 
 # ------------------------------
 # General Settings
 # ------------------------------
-export EDITOR=vim         # エディタをvimに設定
-export LC_ALL=jp_JP.UTF-8 # 文字コードをUTF-8に設定
-export KCODE=u            # KCODEにUTF-8を設定
-setopt correct            # コマンドのスペルを訂正する
-setopt magic_equal_subst  # =以降も補完する(--prefix=/usrなど)
+export PATH="/usr/local/sbin:$PATH"
+export EDITOR=vim        # エディタをvimに設定
+#export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
+export LC_ALL=ja_JP.UTF-8
+export KCODE=u           # KCODEにUTF-8を設定
+setopt correct           # コマンドのスペルを訂正する
+setopt magic_equal_subst # =以降も補完する(--prefix=/usrなど)
 bindkey -e
 bindkey '^U' backward-kill-line
 
@@ -21,11 +26,11 @@ setopt notify            # バックグラウンドジョブの状態変化を�
 setopt equals            # =commandを`which command`と同じ処理にする
 
 ### Complement ###
-autoload -U compinit; compinit # 補完機能を有効にする
-setopt auto_list               # 補完候補を一覧で表示する(d)
-setopt auto_menu               # 補完キー連打で補完候補を順に表示する(d)
-setopt list_packed             # 補完候補をできるだけ詰めて表示する
-setopt list_types              # 補完候補にファイルの種類も表示する
+autoload -Uz compinit        # 補完機能を有効にする
+setopt auto_list             # 補完候補を一覧で表示する(d)
+setopt auto_menu             # 補完キー連打で補完候補を順に表示する(d)
+setopt list_packed           # 補完候補をできるだけ詰めて表示する
+setopt list_types            # 補完候補にファイルの種類も表示する
 bindkey "^[[Z" reverse-menu-complete  # Shift-Tabで補完候補を逆順する("\e[Z"でも動作する)
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # 補完時に大文字小文字を区別しない
 setopt auto_param_slash      # ディレクトリ名の補完で末尾の / を自動的に付加し、次の補完に備える
@@ -180,6 +185,7 @@ export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 # ------------------------------
 export PYENV_ROOT=/usr/local/var/pyenv
 if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
+alias brew="env PATH=${PATH//$(pyenv root)\/shims:/} brew"
 
 # ------------------------------
 # For Ruby
@@ -201,13 +207,16 @@ source <(kubectl completion zsh)
 # ------------------------------
 # The next line updates PATH for the Google Cloud SDK.
 if [ -f ~/google-cloud-sdk/path.zsh.inc ]; then . ~/google-cloud-sdk/path.zsh.inc; fi
-
-# The next line enables shell command completion for gcloud.
+#
+## The next line enables shell command completion for gcloud.
 if [ -f ~/google-cloud-sdk/completion.zsh.inc ]; then . ~/google-cloud-sdk/completion.zsh.inc; fi
 
 # ------------------------------
 # For completion
 # ------------------------------
-autoload -U compinit
-compinit
+compinit # 補完機能を有効にする
 
+# zshの起動が遅くなったときにプロファイルを見る用
+#if (which zprof > /dev/null 2>&1) ;then
+#  zprof
+#fi
