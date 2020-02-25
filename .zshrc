@@ -6,10 +6,8 @@ alias vim='nvim'
 # ------------------------------
 # General Settings
 # ------------------------------
-export PATH="/usr/local/sbin:$PATH"
 export EDITOR=vim        # エディタをvimに設定
-#export LANG=ja_JP.UTF-8  # 文字コードをUTF-8に設定
-export LC_ALL=ja_JP.UTF-8
+export LC_ALL=ja_JP.UTF-8 # 文字コードをUTF-8に設定
 export KCODE=u           # KCODEにUTF-8を設定
 setopt correct           # コマンドのスペルを訂正する
 setopt magic_equal_subst # =以降も補完する(--prefix=/usrなど)
@@ -26,19 +24,19 @@ setopt notify            # バックグラウンドジョブの状態変化を�
 setopt equals            # =commandを`which command`と同じ処理にする
 
 ### Complement ###
-autoload -Uz compinit        # 補完機能を有効にする
-setopt auto_list             # 補完候補を一覧で表示する(d)
-setopt auto_menu             # 補完キー連打で補完候補を順に表示する(d)
-setopt list_packed           # 補完候補をできるだけ詰めて表示する
-setopt list_types            # 補完候補にファイルの種類も表示する
-bindkey "^[[Z" reverse-menu-complete  # Shift-Tabで補完候補を逆順する("\e[Z"でも動作する)
+autoload -Uz compinit && compinit                   # 補完機能を有効にする
+setopt auto_list                                    # 補完候補を一覧で表示する(d)
+setopt auto_menu                                    # 補完キー連打で補完候補を順に表示する(d)
+setopt list_packed                                  # 補完候補をできるだけ詰めて表示する
+setopt list_types                                   # 補完候補にファイルの種類も表示する
+bindkey "^[[Z" reverse-menu-complete                # Shift-Tabで補完候補を逆順する("\e[Z"でも動作する)
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # 補完時に大文字小文字を区別しない
-setopt auto_param_slash      # ディレクトリ名の補完で末尾の / を自動的に付加し、次の補完に備える
-setopt mark_dirs             # ファイル名の展開でディレクトリにマッチした場合 末尾に / を付加
-setopt auto_param_keys       # カッコの対応などを自動的に補完
-setopt complete_in_word      # 語の途中でもカーソル位置で補完
-setopt always_last_prompt    # カーソル位置は保持したままファイル名一覧を順次その場で表示
-setopt brace_ccl # 範囲指定できるようにする (例 : mkdir {1-3} で フォルダ1, 2, 3を作れる)
+setopt auto_param_slash                             # ディレクトリ名の補完で末尾の / を自動的に付加し、次の補完に備える
+setopt mark_dirs                                    # ファイル名の展開でディレクトリにマッチした場合 末尾に / を付加
+setopt auto_param_keys                              # カッコの対応などを自動的に補完
+setopt complete_in_word                             # 語の途中でもカーソル位置で補完
+setopt always_last_prompt                           # カーソル位置は保持したままファイル名一覧を順次その場で表示
+setopt brace_ccl                                    # 範囲指定できるようにする (例 : mkdir {1-3} で フォルダ1, 2, 3を作れる)
 zstyle ':completion:*:default' menu select=2
 # 補完関数の表示を強化する
 zstyle ':completion:*' verbose yes
@@ -136,6 +134,57 @@ if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
 alias ll='ls -l'
 
 # ------------------------------
+# For golang
+# ------------------------------
+export GOENV_ROOT=$HOME/.goenv
+eval "$($GOENV_ROOT/bin/goenv init -)"
+
+# ------------------------------
+# For Rust
+# ------------------------------
+
+# ------------------------------
+# For java
+# ------------------------------
+export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+
+# ------------------------------
+# For python
+# ------------------------------
+export PYENV_ROOT=/usr/local/var/pyenv
+eval "$(pyenv init -)"
+
+# ------------------------------
+# For Ruby
+# ------------------------------
+eval "$(rbenv init -)"
+
+# ------------------------------
+# For docker
+# ------------------------------
+fpath=(/usr/local/share/zsh-completions /usr/local/share/zsh/vendor-completions $fpath)
+alias use-minikube-docker='eval $(minikube docker-env)'
+
+# ------------------------------
+# For k8s
+# ------------------------------
+source <(kubectl completion zsh)
+
+# ------------------------------
+# For GCP
+# ------------------------------
+# The next line updates PATH for the Google Cloud SDK.
+#if [ -f ~/google-cloud-sdk/path.zsh.inc ]; then . ~/google-cloud-sdk/path.zsh.inc; fi
+
+# The next line enables shell command completion for gcloud.
+#if [ -f ~/google-cloud-sdk/completion.zsh.inc ]; then . ~/google-cloud-sdk/completion.zsh.inc; fi
+
+# ------------------------------
+# For completion
+# ------------------------------
+compinit
+
+# ------------------------------
 # For World
 # ------------------------------
 # set SSH_AUTH_SOCK
@@ -163,58 +212,6 @@ alias ll='ls -l'
 #        fi
 #    fi
 #fi
-
-# ------------------------------
-# For golang
-# ------------------------------
-export GOPATH=$HOME/go
-if which goenv > /dev/null; then eval "$(goenv init -)"; fi
-
-# ------------------------------
-# For Rust
-# ------------------------------
-export PATH="$HOME/.cargo/bin:$PATH"
-
-# ------------------------------
-# For java
-# ------------------------------
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
-
-# ------------------------------
-# For python
-# ------------------------------
-export PYENV_ROOT=/usr/local/var/pyenv
-if which pyenv > /dev/null; then eval "$(pyenv init -)"; fi
-alias brew="env PATH=${PATH//$(pyenv root)\/shims:/} brew"
-
-# ------------------------------
-# For Ruby
-# ------------------------------
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-
-# ------------------------------
-# For docker
-# ------------------------------
-fpath=(/usr/local/share/zsh-completions /usr/local/share/zsh/vendor-completions $fpath)
-
-# ------------------------------
-# For k8s
-# ------------------------------
-source <(kubectl completion zsh)
-
-# ------------------------------
-# For GCP
-# ------------------------------
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f ~/google-cloud-sdk/path.zsh.inc ]; then . ~/google-cloud-sdk/path.zsh.inc; fi
-#
-## The next line enables shell command completion for gcloud.
-if [ -f ~/google-cloud-sdk/completion.zsh.inc ]; then . ~/google-cloud-sdk/completion.zsh.inc; fi
-
-# ------------------------------
-# For completion
-# ------------------------------
-compinit # 補完機能を有効にする
 
 # zshの起動が遅くなったときにプロファイルを見る用
 #if (which zprof > /dev/null 2>&1) ;then
