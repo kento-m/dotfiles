@@ -130,6 +130,9 @@ fi
 ### RVM ###
 if [[ -s ~/.rvm/scripts/rvm ]] ; then source ~/.rvm/scripts/rvm ; fi
 
+### PATH ###
+export PATH=/usr/local/sbin:$PATH
+
 ### Aliases ###
 alias ll='ls -l'
 
@@ -137,11 +140,13 @@ alias ll='ls -l'
 # For golang
 # ------------------------------
 export GOENV_ROOT=$HOME/.goenv
-eval "$($GOENV_ROOT/bin/goenv init -)"
+export PATH=$GOENV_ROOT/bin:$PATH
+eval "$(goenv init -)"
 
 # ------------------------------
 # For Rust
 # ------------------------------
+export PATH="$HOME/.cargo/bin:$PATH"
 
 # ------------------------------
 # For java
@@ -168,7 +173,7 @@ alias use-minikube-docker='eval $(minikube docker-env)'
 # ------------------------------
 # For k8s
 # ------------------------------
-source <(kubectl completion zsh)
+#source <(kubectl completion zsh)
 
 # ------------------------------
 # For GCP
