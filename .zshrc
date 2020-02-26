@@ -173,7 +173,12 @@ alias use-minikube-docker='eval $(minikube docker-env)'
 # ------------------------------
 # For k8s
 # ------------------------------
-#source <(kubectl completion zsh)
+source <(kubectl completion zsh)
+
+# ------------------------------
+# For Node.js
+# ------------------------------
+export PATH=$HOME/.nodebrew/current/bin:$PATH
 
 # ------------------------------
 # For GCP

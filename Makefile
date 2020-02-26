@@ -51,7 +51,6 @@ java:
 	$(BREW) install maven
 
 docker:
-	$(BREW) install docker
 	$(BREW) cask install docker
 	$(BREW) install sysdig
 	curl -fLo /usr/local/share/zsh/vendor-completions/_docker https://raw.githubusercontent.com/docker/cli/master/contrib/completion/zsh/_docker
@@ -91,13 +90,11 @@ vim:
 
 
 golang:
-	goenv install 1.11.4
-	goenv global 1.11.4
-	$(BREW) install dep
+	goenv install 1.13.8
+	goenv global 1.13.8
 	mkdir -p ~/go/bin
 	mkdir -p ~/go/pkg
 	mkdir -p ~/go/src
-	go get -u github.com/mdempsky/gocode
 
 cfssl:
 	go get -u github.com/cloudflare/cfssl/cmd/cfssl
