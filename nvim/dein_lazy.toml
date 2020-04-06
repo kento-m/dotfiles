@@ -1,17 +1,4 @@
 [[plugins]]
-repo = 'Shougo/deoplete.nvim'
-on_event = 'InsertEnter'
-hook_add = '''
-  set completeopt=menuone
-  let g:deoplete#enable_at_startup = 1
-  inoremap <expr><Tab> pumvisible() ? "\<DOWN>" : "\<Tab>"
-  inoremap <expr><S-Tab> pumvisible() ? "\<UP>" : "\<S-Tab>"
-'''
-
-[[plugins]]
-repo = 'Shougo/denite.nvim'
-
-[[plugins]]
 repo = 'plasticboy/vim-markdown'
 on_ft = ['markdown']
 depends = ['previm', 'open-browser.vim']
@@ -38,16 +25,3 @@ depends = ['vim-speeddating']
 [[plugins]]
 repo = 'tpope/vim-speeddating'
 
-[[plugins]] 
-repo = 'fatih/vim-go'
-on_ft = ['go']
-
-[[plugins]]
-repo = 'zchee/deoplete-go'
-build = 'make'
-on_ft = ['go']
-depends = ['deoplete.nvim']
-hook_add = '''
-   let g:deoplete#sources#go#gocode_binary = $GOPATH . '/bin/gocode'
-   let g:deoplete#sources#go#package_dot = 1
-'''

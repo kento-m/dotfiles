@@ -2,6 +2,31 @@
 repo = 'Shougo/dein.vim'
 
 [[plugins]]
+repo = 'Shougo/denite.nvim'
+hook_add = '''
+nmap <silent> ,f :<C-u>Denite file/rec<CR>
+nmap <silent> ,g :<C-u>Denite grep<CR>
+nmap <silent> ,b :<C-u>Denite buffer<CR>
+nmap <silent> ,l :<C-u>Denite line<CR>
+
+autocmd FileType denite call s:denite_my_settings()
+function! s:denite_my_settings() abort
+  nnoremap <silent><buffer><expr> <CR>
+  \ denite#do_map('do_action')
+  nnoremap <silent><buffer><expr> d
+  \ denite#do_map('do_action', 'delete')
+  nnoremap <silent><buffer><expr> p
+  \ denite#do_map('do_action', 'preview')
+  nnoremap <silent><buffer><expr> q
+  \ denite#do_map('quit')
+  nnoremap <silent><buffer><expr> i
+  \ denite#do_map('open_filter_buffer')
+  nnoremap <silent><buffer><expr> <Space>
+  \ denite#do_map('toggle_select').'j'
+endfunction
+'''
+
+[[plugins]]
 repo = 'scrooloose/nerdtree'
 hook_add = '''
   nmap <silent> <C-e>	:NERDTreeToggle<CR>
@@ -23,9 +48,14 @@ hook_add = '''
   if !exists('g:airline_symbols')
     let g:airline_symbols = {}
   endif
+  let g:airline_left_sep = '⮀'            "左側に使用されるセパレータ
+  let g:airline_left_alt_sep = '⮁'
+  let g:airline_right_sep = '⮂'           "右側に使用されるセパレータ
+  let g:airline_right_alt_sep = '⮃'
   let g:airline_symbols.crypt = '🔒'      "暗号化されたファイル
   let g:airline_symbols.linenr = '¶'      "行
   let g:airline_symbols.maxlinenr = '㏑'  "最大行
+  let g:airline_symbols.branch = '⭠'      "gitブランチ
   let g:airline_symbols.paste = 'ρ'       "ペーストモード
   let g:airline_symbols.spell = 'Ꞩ'       "スペルチェック
   let g:airline_symbols.notexists = '∄'   "gitで管理されていない場合
@@ -39,4 +69,51 @@ repo = 'vim-airline/vim-airline-themes'
 repo = 'nanotech/jellybeans.vim'
 hook_add = '''
   colorscheme jellybeans
+'''
+
+[[plugins]]
+repo = 'neoclide/coc.nvim'
+rev = 'release'
+hook_add = '''
+" Tabで補完候補を選ぶ
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" <c-space> で補完を開始する
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Enterで補完候補を決定する. 未選択なら一番上の候補を選択. 
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" `[g` `]g` で問題の見つかっている行に移動
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" gdで定義にジャンプ
+nmap <silent> gd <Plug>(coc-definition)
+" gtで型定義にジャンプ
+nmap <silent> gt <Plug>(coc-type-definition)
+" giで実装にジャンプ
+nmap <silent> gi <Plug>(coc-implementation)
+" grで参照元にジャンプ
+nmap <silent> gr <Plug>(coc-references)
+
+" Kでカーソルの箇所のドキュメントを表示する
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
 '''

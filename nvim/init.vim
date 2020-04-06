@@ -20,6 +20,8 @@ endif
 filetype plugin indent on
 syntax enable
 
+let g:python3_host_prog = substitute(system("which python3"), '\n', '', 'g')
+
 "-------------------------------------------------- 
 "
 " General

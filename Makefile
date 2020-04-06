@@ -71,9 +71,9 @@ nodebrew:
 ###############
 
 python:
-	CFLAGS="-I$$(xcrun --show-sdk-path)/usr/include" pyenv install 2.7.13
-	CFLAGS="-I$$(xcrun --show-sdk-path)/usr/include" pyenv install 3.7.2
-	pyenv global 3.7.2
+	CFLAGS="-I$$(xcrun --show-sdk-path)/usr/include" pyenv install 2.7.17
+	CFLAGS="-I$$(xcrun --show-sdk-path)/usr/include" pyenv install 3.8.1
+	pyenv global 3.7.17 3.8.1
 	curl -O https://bootstrap.pypa.io/get-pip.py
 	sudo python get-pip.py
 
@@ -90,8 +90,8 @@ vim:
 
 
 golang:
-	goenv install 1.13.8
-	goenv global 1.13.8
+	goenv install 1.14
+	goenv global 1.14
 	mkdir -p ~/go/bin
 	mkdir -p ~/go/pkg
 	mkdir -p ~/go/src
