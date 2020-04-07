@@ -25,6 +25,7 @@ setopt notify            # バックグラウンドジョブの状態変化を�
 setopt equals            # =commandを`which command`と同じ処理にする
 
 ### Complement ###
+fpath=(/usr/local/share/zsh-completions /usr/local/share/zsh/vendor-completions $fpath)
 autoload -Uz compinit && compinit                   # 補完機能を有効にする
 setopt auto_list                                    # 補完候補を一覧で表示する(d)
 setopt auto_menu                                    # 補完キー連打で補完候補を順に表示する(d)
@@ -52,19 +53,20 @@ zstyle ':completion:*' group-name ''
 # セパレータを設定する
 zstyle ':completion:*' list-separator '-->'
 zstyle ':completion:*:manuals' separate-sections true
-# 名前で色を付けるようにする
-autoload colors
-colors
-# LS_COLORSを設定しておく
-export LS_COLORS='di=34:ln=35:so=32:pi=33:ex=31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
+# プロンプトに色を付ける
+autoload -U colors; colors
+# 補完時の色の設定
+export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
 # ファイル補完候補に色を付ける
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
+# 色の設定
+export LSCOLORS=Exfxcxdxbxegedabagacad
+# ZLS_COLORSとは？
+export ZLS_COLORS=$LS_COLORS
+# lsコマンド時、自動で色がつく
+export CLICOLOR=true
 # オブジェクトファイルとか中間ファイルとかはfileとして補完させない
 zstyle ':completion:*:*files' ignored-patterns '*?.o' '*?~' '*\#'
-
-### Glob ###
-setopt extended_glob # グロブ機能を拡張する
-unsetopt caseglob    # ファイルグロブで大文字小文字を区別しない
 
 ### History ###
 HISTFILE=~/.zsh_history   # ヒストリを保存するファイル
@@ -85,25 +87,6 @@ bindkey "^N" history-beginning-search-forward-end
 
 # すべてのヒストリを表示する
 function history-all { history -E 1 }
-
-# ------------------------------
-# Look And Feel Settings
-# ------------------------------
-### Ls Color ###
-# 色の設定
-export LSCOLORS=Exfxcxdxbxegedabagacad
-# 補完時の色の設定
-export LS_COLORS='di=01;34:ln=01;35:so=01;32:ex=01;31:bd=46;34:cd=43;34:su=41;30:sg=46;30:tw=42;30:ow=43;30'
-# ZLS_COLORSとは？
-export ZLS_COLORS=$LS_COLORS
-# lsコマンド時、自動で色がつく(ls -Gのようなもの？)
-export CLICOLOR=true
-# 補完候補に色を付ける
-zstyle ':completion:*:default' list-colors ${(s.:.)LS_COLORS}
-
-### Prompt ###
-# プロンプトに色を付ける
-autoload -U colors; colors
 
 # ------------------------------
 # Powerline
@@ -168,61 +151,12 @@ eval "$(rbenv init -)"
 # ------------------------------
 # For docker
 # ------------------------------
-fpath=(/usr/local/share/zsh-completions /usr/local/share/zsh/vendor-completions $fpath)
 alias use-minikube-docker='eval $(minikube docker-env)'
 
 # ------------------------------
 # For k8s
 # ------------------------------
 source <(kubectl completion zsh)
-
-# ------------------------------
-# For Node.js
-# ------------------------------
-export PATH=$HOME/.nodebrew/current/bin:$PATH
-
-# ------------------------------
-# For GCP
-# ------------------------------
-# The next line updates PATH for the Google Cloud SDK.
-#if [ -f ~/google-cloud-sdk/path.zsh.inc ]; then . ~/google-cloud-sdk/path.zsh.inc; fi
-
-# The next line enables shell command completion for gcloud.
-#if [ -f ~/google-cloud-sdk/completion.zsh.inc ]; then . ~/google-cloud-sdk/completion.zsh.inc; fi
-
-# ------------------------------
-# For completion
-# ------------------------------
-compinit
-
-# ------------------------------
-# For World
-# ------------------------------
-# set SSH_AUTH_SOCK
-#if [ -n "${TMUX}" ]; then
-#    NEWVAL=`tmux show-environment | grep "^SSH_AUTH_SOCK" | cut -d"=" -f2`
-#    if [ -n "${NEWVAL}" ]; then
-#        export SSH_AUTH_SOCK=${NEWVAL}
-#    fi
-#fi
-#
-#AGENT="$HOME/.ssh/auth_sock_$YROOT_NAME"
-#if [ -z "$TMUX" ]; then
-#    if [ ! -z "$SSH_TTY" ]; then
-#        if [ "$SSH_AUTH_SOCK" -a "$SSH_AUTH_SOCK" != "$AGENT" ]; then
-#            if [ ! -S $AGENT ]; then
-#                rm -f $AGENT
-#                ln -fs $SSH_AUTH_SOCK $AGENT
-#                export SSH_AUTH_SOCK=$AGENT
-#            fi
-#            if [ "$SSH_AUTH_SOCK" != "$AGENT" ]; then
-#                if [ -S $AGENT ]; then
-#                    export SSH_AUTH_SOCK=$AGENT
-#                fi
-#            fi
-#        fi
-#    fi
-#fi
 
 # zshの起動が遅くなったときにプロファイルを見る用
 #if (which zprof > /dev/null 2>&1) ;then
