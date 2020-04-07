@@ -133,15 +133,20 @@ eval "$(goenv init -)"
 export PATH="$HOME/.cargo/bin:$PATH"
 
 # ------------------------------
-# For java
+# For Node.js
 # ------------------------------
-export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+export PATH=$HOME/.nodebrew/current/bin:$PATH
 
 # ------------------------------
 # For python
 # ------------------------------
 export PYENV_ROOT=/usr/local/var/pyenv
 eval "$(pyenv init -)"
+
+# ------------------------------
+# For java
+# ------------------------------
+export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 
 # ------------------------------
 # For Ruby
