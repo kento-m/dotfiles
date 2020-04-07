@@ -149,14 +149,14 @@ eval "$(pyenv init -)"
 eval "$(rbenv init -)"
 
 # ------------------------------
-# For docker
-# ------------------------------
-alias use-minikube-docker='eval $(minikube docker-env)'
-
-# ------------------------------
 # For k8s
 # ------------------------------
 source <(kubectl completion zsh)
+
+# ------------------------------
+# For docker
+# ------------------------------
+alias use-minikube-docker='eval $(minikube docker-env)'
 
 # zshの起動が遅くなったときにプロファイルを見る用
 #if (which zprof > /dev/null 2>&1) ;then
