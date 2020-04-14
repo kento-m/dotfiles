@@ -38,6 +38,7 @@ set autoindent
 set smarttab
 set expandtab
 set ts=4 sw=4 sts=4
+set termguicolors
 
 " j, k による移動を折り返されたテキストでも自然に振る舞うように変更
 nnoremap j gj
