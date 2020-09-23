@@ -47,7 +47,8 @@ goenv:
 	git clone https://github.com/dataich/goenv.git ~/.goenv
 
 java:
-	$(BREW) cask install java
+	$(BREW) tap AdoptOpenJDK/openjdk
+	$(BREW) cask install adoptopenjdk8
 	$(BREW) install maven
 
 docker:
@@ -115,3 +116,5 @@ update-dotfiles:
 
 rust:
 	curl https://sh.rustup.rs -sSf | sh
+	cp ~/.rustup/toolchains/stable-x86_64-apple-darwin/share/zsh/site-functions/_cargo /usr/local/share/zsh-completions
+	rustup completions zsh > /usr/local/share/zsh-completions/_rustup
