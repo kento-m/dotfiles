@@ -105,6 +105,8 @@ nmap <silent> gt <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 " grで参照元にジャンプ
 nmap <silent> gr <Plug>(coc-references)
+" gfでフォーマット
+nmap <silent> gf <Plug>(coc-format)
 
 " Kでカーソルの箇所のドキュメントを表示する
 nnoremap <silent> K :call <SID>show_documentation()<CR>
